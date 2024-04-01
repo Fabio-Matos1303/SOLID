@@ -24,7 +24,8 @@ import { ShoppingCart } from './ocp/classes/shopping-cart';
 import { FiftyPercentDicount, NoDiscount } from './ocp/classes/discount';
 
 const noDiscount = new NoDiscount();
-const shoppingCart = new ShoppingCart(noDiscount);
+const fiftyPercentDicount = new FiftyPercentDicount();
+const shoppingCart = new ShoppingCart(fiftyPercentDicount);
 const messaging = new Messaging();
 const persistency = new Persistency();
 const order = new Order(shoppingCart, messaging, persistency);

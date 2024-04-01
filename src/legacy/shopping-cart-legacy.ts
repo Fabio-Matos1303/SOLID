@@ -1,19 +1,11 @@
-type CartItem = { name: string; price: number };
+type CartItem = { item: string; price: number };
 type OrderStatus = 'open' | 'closed';
 
 export class ShoppingCartLegacy {
   private readonly _items: CartItem[] = [];
   private _orderStatus: OrderStatus = 'open';
 
-  addItem(item: CartItem): void {
-    this._items.push(item);
-  }
-
-  removeItem(index: number): void {
-    this._items.splice(index, 1);
-  }
-
-  get items(): Readonly<CartItem[]> {
+  get items(): readonly CartItem[] {
     return this._items;
   }
 
@@ -21,15 +13,42 @@ export class ShoppingCartLegacy {
     return this._orderStatus;
   }
 
+  addItem(item: CartItem): CartItem {
+    this._items.push(item);
+
+    return item;
+  }
+
+  removeItem(index: number): void {
+    this._items.splice(index, 1);
+  }
+
   total(): number {
     return +this._items
-      .reduce((total, next) => total + next.price, 0)
+      .reduce((total, item) => total + item.price, 0)
       .toFixed(2);
+  }
+
+  isEmpty(): boolean {
+    return this._items.length === 0;
+  }
+
+  sendMessage(message: string): void {
+    console.log('Mensagem enviada: ', message);
+  }
+
+  saveOrder(): void {
+    console.log('Pedido salvo com sucesso');
+  }
+
+  clear(): void {
+    console.log('Carrinho de compras foi limpo');
+    this._items.length = 0;
   }
 
   checkout(): void {
     if (this.isEmpty()) {
-      console.log('Seu carrinho está vazio');
+      console.log('Seu carrinho esta vazio');
       return;
     }
 
@@ -38,32 +57,14 @@ export class ShoppingCartLegacy {
     this.saveOrder();
     this.clear();
   }
-
-  isEmpty(): boolean {
-    return this._items.length === 0;
-  }
-
-  sendMessage(msg: string): void {
-    console.log('Mensagem enviada:', msg);
-  }
-
-  saveOrder(): void {
-    console.log('Pedido salvo com sucesso...');
-  }
-
-  clear(): void {
-    console.log('Carrinho de compras foi limpo...');
-    this._items.length = 0;
-  }
 }
 
-const shoppingCart = new ShoppingCartLegacy();
-shoppingCart.addItem({ name: 'Camiseta', price: 49.91 });
-shoppingCart.addItem({ name: 'Caderno', price: 9.9123 });
-shoppingCart.addItem({ name: 'Lápis', price: 1.59 });
+const cart = new ShoppingCartLegacy();
+cart.addItem({ item: 'foo', price: 10.9 });
+cart.addItem({ item: 'foo', price: 10.9 });
+cart.addItem({ item: 'foo', price: 10.9 });
 
-console.log(shoppingCart.items);
-console.log(shoppingCart.total());
-console.log(shoppingCart.orderStatus);
-shoppingCart.checkout();
-console.log(shoppingCart.orderStatus);
+console.log(cart.items);
+console.log(cart.orderStatus);
+cart.checkout();
+console.log(cart.orderStatus);

@@ -16,13 +16,15 @@ Desvantagens:
 - Tenha cuidados com: YAGNI, KISS (You aren't gonna need it, Keep it simple, stupid!)
 */
 
-import { Messaging } from './srp/services/messaging';
-import { Order } from './srp/entities/order';
-import { Persistency } from './srp/services/persistency';
-import { Product } from './srp/entities/product';
-import { ShoppingCart } from './srp/entities/shopping-cart';
+import { Messaging } from './ocp/services/messaging';
+import { Order } from './ocp/classes/order';
+import { Persistency } from './ocp/services/persistency';
+import { Product } from './ocp/classes/product';
+import { ShoppingCart } from './ocp/classes/shopping-cart';
+import { FiftyPercentDicount, NoDiscount } from './ocp/classes/discount';
 
-const shoppingCart = new ShoppingCart();
+const noDiscount = new NoDiscount();
+const shoppingCart = new ShoppingCart(noDiscount);
 const messaging = new Messaging();
 const persistency = new Persistency();
 const order = new Order(shoppingCart, messaging, persistency);
@@ -31,6 +33,8 @@ shoppingCart.addItem(new Product('Garrafa', 25.9));
 shoppingCart.addItem(new Product('Lanterna', 21.9));
 
 console.log(shoppingCart.items);
+console.log('Total: ' + shoppingCart.total());
+console.log('Total com desconto: ' + shoppingCart.totalWithDiscount());
 console.log(order.orderStatus);
 order.checkout();
 console.log(order.orderStatus);
